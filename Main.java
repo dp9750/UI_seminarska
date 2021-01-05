@@ -51,7 +51,7 @@ public class Main {
      * Print 2d char array
      * @param conf 2d char configuration array
      */
-    private static void print2DArray(char[][] conf) {
+    public static void print2DArray(char[][] conf) {
         for (char[] chars : conf) {
             for (char c : chars)
                 System.out.print(c + ",");
@@ -94,7 +94,7 @@ public class Main {
     }
 
     /** Is array a equal to array b */
-    private static boolean compare(char[][] a, char[][] b) {
+    public static boolean compare(char[][] a, char[][] b) {
         if (a.length != b.length) return false;
         if (a.length == 0) return true;
         if (a[0].length != b[0].length) return false;
@@ -107,12 +107,12 @@ public class Main {
     }
 
     /**
-     * Does the generated configuration already exist
-     * @param confs all configurations
-     * @param conf given
-     * @return true or false
+     * Does ArrayList confs contain given configuration
+     * @param confs
+     * @param conf
+     * @return
      */
-    private static boolean contains(ArrayList<char[][]> confs, char[][] conf) {
+    public static boolean contains(ArrayList<char[][]> confs, char[][] conf) {
         for (char[][] chars : confs)
             if (compare(chars, conf))
                 return true;
@@ -132,7 +132,7 @@ public class Main {
      * @param conf given start configuration
      * @return ArrayList of all configurations
      */
-    private static ArrayList<char[][]> generate(char[][] conf) {
+    public static ArrayList<char[][]> generate(char[][] conf) {
         final int cols = conf[0].length;
 
         ArrayList<char[][]> confs = new ArrayList<>();
@@ -176,22 +176,18 @@ public class Main {
             System.exit(1);
         }
 
-        char[][] zacetna = readFile(args[0]);
-        char[][] koncna = readFile(args[1]);
+        char[][] startConf = readFile(args[0]);
+        char[][] endConf   = readFile(args[1]);
          */
 
         // Začasno:
-        char[][] zacetna = readFile("primer1_zacetna.txt");
-        char[][] koncna = readFile("primer1_koncna.txt");
+        char[][] startConf = readFile("primer3_zacetna.txt");
+        char[][] endConf   = readFile("primer3_koncna.txt");
 
-        print2DArray(zacetna);
+        print2DArray(startConf);
         System.out.println("-------");
 
-        ArrayList<char[][]> confs = generate(zacetna);
-        for (char[][] conf : confs) {
-            print2DArray(conf);
-            System.out.println();
-        }
+        DFS.search(startConf, endConf);
     }
 
 }
