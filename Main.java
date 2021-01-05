@@ -66,7 +66,7 @@ public class Main {
      * @param p where to take from
      * @param r where to move
      */
-    public static void move(char[][] conf, int p, int r) {
+    private static void move(char[][] conf, int p, int r) {
         if (r < 1 || p < 1 || p == r) return;
 
         // Index
@@ -93,6 +93,76 @@ public class Main {
         }
     }
 
+    /** Is array a equal to array b */
+    private static boolean compare(char[][] a, char[][] b) {
+        if (a.length != b.length) return false;
+        if (a.length == 0) return true;
+        if (a[0].length != b[0].length) return false;
+
+        for (int y = 0; y < a.length; y++)
+            for (int x = 0; x < a[y].length; x++)
+                if (a[y][x] != b[y][x])
+                    return false;
+        return true;
+    }
+
+    /**
+     * Does the generated configuration already exist
+     * @param confs all configurations
+     * @param conf given
+     * @return true or false
+     */
+    private static boolean contains(ArrayList<char[][]> confs, char[][] conf) {
+        for (char[][] chars : confs)
+            if (compare(chars, conf))
+                return true;
+        return false;
+    }
+
+    /** Copy 2d array */
+    private static char[][] copy(char[][] a) {
+        char[][] c = new char[a.length][a[0].length];
+        for (int y = 0; y < a.length; y++)
+            System.arraycopy(a[y], 0, c[y], 0, a[y].length);
+        return c;
+    }
+
+    /**
+     * Generate all possible configurations from given conf
+     * @param conf given start configuration
+     * @return ArrayList of all configurations
+     */
+    private static ArrayList<char[][]> generate(char[][] conf) {
+        final int cols = conf[0].length;
+
+        ArrayList<char[][]> confs = new ArrayList<>();
+        confs.add(conf);
+
+        // Try placing blocks to the right of current block
+        for (int y = 0; y < cols; y++) {
+            for (int x = 1; x < cols; x++) {
+                char[][] tmpConf = copy(conf);
+                move(tmpConf, y+1, x+1);
+
+                if (!contains(confs, tmpConf))
+                    confs.add(tmpConf);
+            }
+        }
+
+        // Try placing blocks to the left of current block
+        for (int y = cols-1; y >= 0; y--) {
+            for (int x = cols-2; x >= 0; x--) {
+                char[][] tmpConf = copy(conf);
+                move(tmpConf, y+1, x+1);
+
+                if (!contains(confs, tmpConf))
+                    confs.add(tmpConf);
+            }
+        }
+
+        return confs;
+    }
+
     /**
      * Začetno in končno konfiguracijo prejme iz args ali standard inputa?
      *
@@ -115,11 +185,13 @@ public class Main {
         char[][] koncna = readFile("primer1_koncna.txt");
 
         print2DArray(zacetna);
-        System.out.println();
-        move(zacetna, 1, 2);
-        print2DArray(zacetna);
+        System.out.println("-------");
 
-
+        ArrayList<char[][]> confs = generate(zacetna);
+        for (char[][] conf : confs) {
+            print2DArray(conf);
+            System.out.println();
+        }
     }
 
 }
