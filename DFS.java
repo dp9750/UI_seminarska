@@ -11,10 +11,13 @@ public class DFS {
         Stack<char[][]> stack = new Stack<>(); // Nodes to check
 
         ArrayList<char[][]> visited = new ArrayList<>();  // Already visited nodes
-        ArrayList<char[][]> possibleMoves;  // Possible moves from current node
+        ArrayList<Conf> possibleMoves;  // Possible moves from current node
+                                        // and how to get them
 
-        // Key: newConf, Value: curConf
         Map<char[][], char[][]> map = new HashMap<>();  // Find previous step
+
+        // Key: newConfiguration, Value: curConf & parameter p r
+        Map<char[][], Conf> betterMap = new HashMap<>();
 
         // Add start node to stack
         stack.push(start);
@@ -27,18 +30,12 @@ public class DFS {
             // Is current node the solution
             if (Main.compare(currentNode, end)) {
 
-                System.out.println("Path: ");
-
-                while (map.containsKey(currentNode))
+                while (betterMap.containsKey(currentNode))
                 {
-                    Main.print2DArray(currentNode);
-                    System.out.println();
+                    System.out.println(betterMap.get(currentNode).toString());
 
-                    currentNode = map.get(currentNode);
+                    currentNode = betterMap.get(currentNode).conf;
                 }
-
-                Main.print2DArray(start);
-
                 return;
             }
 
@@ -48,11 +45,11 @@ public class DFS {
             // Generate possible moves from current node
             possibleMoves = Main.generate(currentNode);
 
-            // If not in visited, check neighbour node
-            for (char[][] node : possibleMoves) {
-                if (!Main.contains(visited, node)) {
-                    stack.push(node);
-                    map.put(node, currentNode);
+            for (Conf move : possibleMoves) {
+                if (!Main.contains(visited, move.conf)) {
+                    stack.push(move.conf);
+
+                    betterMap.put(move.conf, new Conf(currentNode, move.p, move.r));
                 }
             }
         }

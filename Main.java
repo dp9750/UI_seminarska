@@ -112,6 +112,14 @@ public class Main {
         return true;
     }
 
+    /** Copy 2d array */
+    private static char[][] copy(char[][] a) {
+        char[][] c = new char[a.length][a[0].length];
+        for (int y = 0; y < a.length; y++)
+            System.arraycopy(a[y], 0, c[y], 0, a[y].length);
+        return c;
+    }
+
     /**
      * Does ArrayList confs contain given configuration
      * @param confs ArrayList of configurations
@@ -125,24 +133,30 @@ public class Main {
         return false;
     }
 
-    /** Copy 2d array */
-    private static char[][] copy(char[][] a) {
-        char[][] c = new char[a.length][a[0].length];
-        for (int y = 0; y < a.length; y++)
-            System.arraycopy(a[y], 0, c[y], 0, a[y].length);
-        return c;
+    /**
+     * Does ArrayList of configurations contain a given configuration
+     * @param confs all configurations
+     * @param conf given config
+     * @return true or false
+     */
+    private static boolean containsConf(ArrayList<Conf> confs, char[][] conf) {
+        for (Conf value : confs)
+            if (compare(conf, value.conf))
+                return true;
+        return false;
     }
 
     /**
      * Generate all possible configurations from given conf
+     * and store parameters on how to get them.
      * @param conf given start configuration
-     * @return ArrayList of all configurations
+     * @return ArrayList of all configurations & parameters
      */
-    public static ArrayList<char[][]> generate(char[][] conf) {
+    public static ArrayList<Conf> generate(char[][] conf) {
         final int cols = conf[0].length;
 
-        ArrayList<char[][]> confs = new ArrayList<>();
-        confs.add(conf);
+        ArrayList<Conf> confs = new ArrayList<>();
+        confs.add(new Conf(conf, 0,0));
 
         // Try placing blocks to the right of current block
         for (int y = 0; y < cols; y++) {
@@ -150,8 +164,8 @@ public class Main {
                 char[][] tmpConf = copy(conf);
                 move(tmpConf, y+1, x+1);
 
-                if (!contains(confs, tmpConf))
-                    confs.add(tmpConf);
+                if (!containsConf(confs, tmpConf))
+                    confs.add(new Conf(tmpConf, y+1, x+1));
             }
         }
 
@@ -161,8 +175,8 @@ public class Main {
                 char[][] tmpConf = copy(conf);
                 move(tmpConf, y+1, x+1);
 
-                if (!contains(confs, tmpConf))
-                    confs.add(tmpConf);
+                if (!containsConf(confs, tmpConf))
+                    confs.add(new Conf(tmpConf, y+1, x+1));
             }
         }
 
@@ -190,10 +204,8 @@ public class Main {
         char[][] startConf = readFile("primer1_zacetna.txt");
         char[][] endConf   = readFile("primer1_koncna.txt");
 
-        print2DArray(startConf);
-        System.out.println("-------");
-
         DFS.search(startConf, endConf);
+
     }
 
 }
