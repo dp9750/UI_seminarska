@@ -1,12 +1,78 @@
 package UI_seminarska;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Stack;
 
 public class DFS {
 
+    public static ArrayList<Integer> search(int[][] graph, int startNode, int endNode)
+    {
+        // Statistics
+        int maxDepth = 0, generatedNodes = 0;
+        boolean[] marked = new boolean[graph.length]; // checked nodes
+        int[] from = new int[graph.length];           // backtrack path
+
+        Stack<Integer> stack = new Stack<>();         // nodes to check
+
+        ArrayList<Integer> path = new ArrayList<>();  // path to solution
+
+        from[startNode] = -1;
+        marked[startNode] = true;
+        stack.push(startNode);
+
+        while(!stack.isEmpty())
+        {
+            // Current node
+            int curNode = stack.peek();
+
+            // If current node is the end node
+            // Create and return path
+            if (endNode == curNode)
+            {
+                path.add(curNode);
+
+                while (true)
+                {
+                    curNode = from[curNode];
+                    if (curNode != -1)
+                        path.add(curNode);
+                    else
+                        break;
+                }
+
+                System.out.println("Maksimlna globina: " + maxDepth);
+                System.out.println("Generirana vozlišča: " + generatedNodes);
+                System.out.println("Obdelana vozlišča: " + path.size());
+
+                return path;
+            }
+
+            maxDepth++;
+
+            // find unvisited neighbour
+            boolean found = false;
+            for (int nextNode = 0; nextNode < graph[curNode].length; nextNode++)
+            {
+                if (graph[curNode][nextNode] == 1 && !marked[nextNode])
+                {
+                    marked[nextNode] = true;
+                    from[nextNode] = curNode;
+                    stack.push(nextNode);
+
+                    generatedNodes++;
+
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found) stack.pop();
+        }
+
+        return null;
+    }
+
+    /*
     public static void search(char[][] start, char[][] end) {
 
         // Statistics
@@ -65,5 +131,5 @@ public class DFS {
 
         System.out.println("Cannot find solution. ");
     }
-
+    */
 }
