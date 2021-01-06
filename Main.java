@@ -139,7 +139,7 @@ public class Main {
      * @param conf given config
      * @return true or false
      */
-    private static boolean containsConf(ArrayList<Conf> confs, char[][] conf) {
+    public static boolean containsConf(ArrayList<Conf> confs, char[][] conf) {
         for (Conf value : confs)
             if (compare(conf, value.conf))
                 return true;
@@ -204,7 +204,7 @@ public class Main {
         char[][] startConf = readFile("primer1_zacetna.txt");
         char[][] endConf   = readFile("primer1_koncna.txt");
 
-        DFS.search(startConf, endConf);
+        BFS.search(startConf, endConf);
 
     }
 

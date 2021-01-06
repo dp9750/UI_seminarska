@@ -19,7 +19,7 @@ public class DFS {
                                         // and how to get them
 
         // Key: newConfiguration, Value: curConf & parameter p r
-        Map<char[][], Conf> betterMap = new HashMap<>();
+        Map<char[][], Conf> map = new HashMap<>();
 
         // Add start node to stack
         stack.push(start);
@@ -37,11 +37,11 @@ public class DFS {
                 System.out.println("Število obdelanih vozlišč: " + processedNodes);
                 System.out.println("Število generiranih vozlišč: " + generatedNodes);
                 System.out.println("Zaporedje ukazov (od spodaj navzgor): ");
-                while (betterMap.containsKey(currentNode))
+                while (map.containsKey(currentNode))
                 {
-                    System.out.println(betterMap.get(currentNode).toString());
+                    System.out.println(map.get(currentNode).toString());
 
-                    currentNode = betterMap.get(currentNode).conf;
+                    currentNode = map.get(currentNode).conf;
                 }
                 return;
             }
@@ -58,7 +58,7 @@ public class DFS {
                 if (!Main.contains(visited, move.conf)) {
                     stack.push(move.conf);
 
-                    betterMap.put(move.conf, new Conf(currentNode, move.p, move.r));
+                    map.put(move.conf, new Conf(currentNode, move.p, move.r));
                 }
             }
         }
