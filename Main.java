@@ -13,6 +13,7 @@ public class Main {
      */
     private static char[][] readFile(String filename) {
         ArrayList<char[]> input = new ArrayList<>();
+
         // If file not found, exit
         try {
             Scanner sc = new Scanner(new File(filename));
@@ -30,8 +31,10 @@ public class Main {
             System.out.println("Datoteka " + filename + " ni bila najdena.");
             System.exit(2);
         }
+
         // Array dimensions
         int P = 0, N = 0;
+
         // Get dimensions
         try {
             P = input.size();
@@ -40,6 +43,7 @@ public class Main {
             System.out.println("Error reading files");
             System.exit(2);
         }
+
         // Convert ArrayList to char array
         char[][] out = new char[P][N];
         for (int i = 0; i < P; i++)
@@ -73,6 +77,7 @@ public class Main {
         p--; r--;
 
         char top = ' ';
+
         // Find top of column p
         for (int y = 0; y < conf.length; y++) {
             if (conf[y][p] != ' ') {
@@ -81,6 +86,7 @@ public class Main {
                 break;
             }
         }
+
         // If there are no blocks in column p
         if (top == ' ') return;
 
@@ -108,9 +114,9 @@ public class Main {
 
     /**
      * Does ArrayList confs contain given configuration
-     * @param confs
-     * @param conf
-     * @return
+     * @param confs ArrayList of configurations
+     * @param conf current configuration
+     * @return true or false
      */
     public static boolean contains(ArrayList<char[][]> confs, char[][] conf) {
         for (char[][] chars : confs)
@@ -181,8 +187,8 @@ public class Main {
          */
 
         // Začasno:
-        char[][] startConf = readFile("primer3_zacetna.txt");
-        char[][] endConf   = readFile("primer3_koncna.txt");
+        char[][] startConf = readFile("primer1_zacetna.txt");
+        char[][] endConf   = readFile("primer1_koncna.txt");
 
         print2DArray(startConf);
         System.out.println("-------");

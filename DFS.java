@@ -1,6 +1,8 @@
 package UI_seminarska;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Stack;
 
 public class DFS {
@@ -10,6 +12,9 @@ public class DFS {
 
         ArrayList<char[][]> visited = new ArrayList<>();  // Already visited nodes
         ArrayList<char[][]> possibleMoves;  // Possible moves from current node
+
+        // Key: newConf, Value: curConf
+        Map<char[][], char[][]> map = new HashMap<>();  // Find previous step
 
         // Add start node to stack
         stack.push(start);
@@ -21,7 +26,19 @@ public class DFS {
 
             // Is current node the solution
             if (Main.compare(currentNode, end)) {
-                Main.print2DArray(currentNode);
+
+                System.out.println("Path: ");
+
+                while (map.containsKey(currentNode))
+                {
+                    Main.print2DArray(currentNode);
+                    System.out.println();
+
+                    currentNode = map.get(currentNode);
+                }
+
+                Main.print2DArray(start);
+
                 return;
             }
 
@@ -32,9 +49,12 @@ public class DFS {
             possibleMoves = Main.generate(currentNode);
 
             // If not in visited, check neighbour node
-            for (char[][] node : possibleMoves)
-                if (!Main.contains(visited, node))
+            for (char[][] node : possibleMoves) {
+                if (!Main.contains(visited, node)) {
                     stack.push(node);
+                    map.put(node, currentNode);
+                }
+            }
         }
 
         System.out.println("Cannot find solution. ");
