@@ -187,9 +187,9 @@ public class Main {
 
     /**
      * Does stack contain given configuration
-     * @param stack
-     * @param conf
-     * @return
+     * @param stack given stack
+     * @param conf given configuration
+     * @return true or false
      */
     public static boolean stackContains(Stack<Conf> stack, Conf conf) {
         for (Conf value : stack)
@@ -219,7 +219,7 @@ public class Main {
         char[][] startConf = readFile("primer1_zacetna.txt");
         char[][] endConf   = readFile("primer1_koncna.txt");
 
-        DFS.search(new Conf(startConf, 0, 0), endConf);
+        IDDFS.search(new Conf(startConf, 0, 0), endConf);
 
     }
 

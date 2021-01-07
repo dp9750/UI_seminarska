@@ -28,19 +28,21 @@ public class DFS {
             // If current node is the end node
             if (Main.compare(current.conf, end))
             {
-                System.out.println("Obdelana vozlišča: " + visited.size());
+                System.out.println("Obdelana vozlišča: " + (visited.size() + 1));
                 System.out.println("Generirana vozlišča: " + generatedNodes);
 
                 // Print path
                 System.out.println("Izpis ukazov (od spodaj navzdgor): ");
+                current = map.get(current.conf);
                 while (map.containsKey(current.conf))
                 {
                     System.out.println(current.toString());
+                    current = map.get(current.conf);
 
                     maxDepth++;
-                    current = map.get(current.conf);
                 }
                 System.out.println(current.toString());
+
                 System.out.println("Maksimalna globina: " + maxDepth);
 
                 return;
