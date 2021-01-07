@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
+import java.util.Stack;
 
 public class Main {
 
@@ -185,82 +186,16 @@ public class Main {
     }
 
     /**
-     * Generate all possible configurations
-     * @param startConf starting configuration
-     * @return ArrayList of configurations & attributes
+     * Does stack contain given configuration
+     * @param stack
+     * @param conf
+     * @return
      */
-    public static ArrayList<Conf> generateGraph(char[][] startConf) {
-
-        // ArrayList of all possible configurations
-        ArrayList<Conf> confs = new ArrayList<>();
-        confs.add(new Conf(startConf, 0, 0));
-
-        // Generate graph nodes
-        while (true)
-        {
-            ArrayList<Conf> toAdd = new ArrayList<>();
-
-            for (Conf conf : confs)
-            {
-                // Newly generated configurations
-                ArrayList<Conf> generated = generate(conf.conf);
-
-                // Add unique
-                for (Conf c : generated)
-                    if (!containsConf(confs, c.conf))
-                        toAdd.add(c);
-            }
-
-            // If no new ones, stop
-            if (toAdd.size() == 0) break;
-
-            confs.addAll(toAdd);
-        }
-
-        return confs;
-    }
-
-    /**
-     * Generate association matrix from given graph of configurations
-     * @param confs graph nodes
-     * @return 2d int association array
-     */
-    private static int[][] generateMatrix(ArrayList<Conf> confs) {
-        final int n = confs.size();     // graph size
-        int[][] matrix = new int[n][n]; // the matrix
-
-        for (int i = 0; i < n; i++)
-        {
-            for (int j = 0; j < n; j++)
-            {
-                if (i == j)
-                    matrix[i][j] = 0;
-                else {
-                    // Neighbours of node j
-                    ArrayList<Conf> neighbours = generate(confs.get(j).conf);
-
-                    if (containsConf(neighbours, confs.get(i).conf))
-                        matrix[i][j] = 1;
-                    else
-                        matrix[i][j] = 0;
-                }
-            }
-        }
-
-        return matrix;
-    }
-
-    /**
-     * Get index of element in ArrayList
-     * @param confs ArrayList of configurations
-     * @param conf element
-     * @return index of the element, if not found null
-     */
-    private static int indexOf(ArrayList<Conf> confs, char[][] conf) {
-        for (int i = 0; i < confs.size(); i++)
-            if (compare(confs.get(i).conf, conf))
-                return i;
-        return -1;
+    public static boolean stackContains(Stack<Conf> stack, Conf conf) {
+        for (Conf value : stack)
+            if (compare(conf.conf, value.conf))
+                return true;
+        return false;
     }
 
     /**
@@ -284,22 +219,7 @@ public class Main {
         char[][] startConf = readFile("primer1_zacetna.txt");
         char[][] endConf   = readFile("primer1_koncna.txt");
 
-        ArrayList<Conf> graph = generateGraph(startConf);
-        int[][] matrix = generateMatrix(graph);
-        int index = indexOf(graph, endConf);
-        if (index == -1) System.exit(3);
-
-        ArrayList<Integer> path = DFS.search(matrix, 0, index);
-
-        if (path != null) {
-            System.out.println("Argumenti ukaza prestavi: ");
-            for (int i = path.size()-1; i >= 0; i--){
-                index = path.get(i);
-                Conf node = graph.get(index);
-
-                System.out.println(node.toString());
-            }
-        }
+        DFS.search(new Conf(startConf, 0, 0), endConf);
 
     }
 

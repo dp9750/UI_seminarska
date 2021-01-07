@@ -1,135 +1,67 @@
 package UI_seminarska;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Stack;
 
 public class DFS {
 
-    public static ArrayList<Integer> search(int[][] graph, int startNode, int endNode)
+    public static void search(Conf start, char[][] end)
     {
+        Stack<Conf> stack = new Stack<>();          // nodes to visit
+        ArrayList<Conf> visited = new ArrayList<>();// already visited nodes
+        Map<char[][], Conf> map = new HashMap<>();  // path
+
         // Statistics
         int maxDepth = 0, generatedNodes = 0;
-        boolean[] marked = new boolean[graph.length]; // checked nodes
-        int[] from = new int[graph.length];           // backtrack path
 
-        Stack<Integer> stack = new Stack<>();         // nodes to check
-
-        ArrayList<Integer> path = new ArrayList<>();  // path to solution
-
-        from[startNode] = -1;
-        marked[startNode] = true;
-        stack.push(startNode);
-
-        while(!stack.isEmpty())
-        {
-            // Current node
-            int curNode = stack.peek();
-
-            // If current node is the end node
-            // Create and return path
-            if (endNode == curNode)
-            {
-                path.add(curNode);
-
-                while (true)
-                {
-                    curNode = from[curNode];
-                    if (curNode != -1)
-                        path.add(curNode);
-                    else
-                        break;
-                }
-
-                System.out.println("Maksimlna globina: " + maxDepth);
-                System.out.println("Generirana vozlišča: " + generatedNodes);
-                System.out.println("Obdelana vozlišča: " + path.size());
-
-                return path;
-            }
-
-            maxDepth++;
-
-            // find unvisited neighbour
-            boolean found = false;
-            for (int nextNode = 0; nextNode < graph[curNode].length; nextNode++)
-            {
-                if (graph[curNode][nextNode] == 1 && !marked[nextNode])
-                {
-                    marked[nextNode] = true;
-                    from[nextNode] = curNode;
-                    stack.push(nextNode);
-
-                    generatedNodes++;
-
-                    found = true;
-                    break;
-                }
-            }
-
-            if (!found) stack.pop();
-        }
-
-        return null;
-    }
-
-    /*
-    public static void search(char[][] start, char[][] end) {
-
-        // Statistics
-        int processedNodes = 0, maxDepth = 0, generatedNodes = 0;
-
-        Stack<char[][]> stack = new Stack<>(); // Nodes to check
-
-        ArrayList<char[][]> visited = new ArrayList<>();  // Already visited nodes
-        ArrayList<Conf> possibleMoves;  // Possible moves from current node
-                                        // and how to get them
-
-        // Key: newConfiguration, Value: curConf & parameter p r
-        Map<char[][], Conf> map = new HashMap<>();
-
-        // Add start node to stack
+        // Add start to checked nodes
         stack.push(start);
 
+        // While there are nodes to check
         while (!stack.isEmpty())
         {
-            // Current node
-            char[][] currentNode = stack.remove(0);
-            processedNodes++;
+            // Check last element in stack
+            Conf current = stack.pop();
 
-            // Is current node the solution
-            if (Main.compare(currentNode, end)) {
+            // If current node is the end node
+            if (Main.compare(current.conf, end))
+            {
+                System.out.println("Obdelana vozlišča: " + visited.size());
+                System.out.println("Generirana vozlišča: " + generatedNodes);
 
-                System.out.println("Največja globina: " + maxDepth);
-                System.out.println("Število obdelanih vozlišč: " + processedNodes);
-                System.out.println("Število generiranih vozlišč: " + generatedNodes);
-                System.out.println("Zaporedje ukazov (od spodaj navzgor): ");
-                while (map.containsKey(currentNode))
+                // Print path
+                System.out.println("Izpis ukazov (od spodaj navzdgor): ");
+                while (map.containsKey(current.conf))
                 {
-                    System.out.println(map.get(currentNode).toString());
+                    System.out.println(current.toString());
 
-                    currentNode = map.get(currentNode).conf;
+                    maxDepth++;
+                    current = map.get(current.conf);
                 }
+                System.out.println(current.toString());
+                System.out.println("Maksimalna globina: " + maxDepth);
+
                 return;
             }
 
-            // Add current to visited
-            visited.add(currentNode);
+            // add current node to visited
+            visited.add(current);
 
-            // Generate possible moves from current node
-            possibleMoves = Main.generate(currentNode);
-            generatedNodes += possibleMoves.size();
-            maxDepth++;
+            // Neighbours of the current node
+            ArrayList<Conf> neighbours = Main.generate(current.conf);
 
-            for (Conf move : possibleMoves) {
-                if (!Main.contains(visited, move.conf)) {
-                    stack.push(move.conf);
+            // Check unchecked neighbours
+            for (Conf neighbour : neighbours) {
+                if (!Main.containsConf(visited, neighbour.conf) &&
+                        !Main.stackContains(stack, neighbour)) {
+                    stack.push(neighbour);
 
-                    map.put(move.conf, new Conf(currentNode, move.p, move.r));
+                    map.put(neighbour.conf, new Conf(current.conf, neighbour.p, neighbour.r));
+                    generatedNodes++;
                 }
             }
         }
-
-        System.out.println("Cannot find solution. ");
     }
-    */
 }
