@@ -11,6 +11,8 @@ public class Conf {
     public char[][] conf;   // Configuration
     public int p, r;        // p : move from, r : move to
 
+    public int g, h;        // AStar
+
     public Conf(char[][] conf, int p, int r) {
         this.conf = conf;
         this.p = p;

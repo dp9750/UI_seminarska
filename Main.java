@@ -3,7 +3,6 @@ package UI_seminarska;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Scanner;
 import java.util.Stack;
 
@@ -219,7 +218,7 @@ public class Main {
         char[][] startConf = readFile("primer1_zacetna.txt");
         char[][] endConf   = readFile("primer1_koncna.txt");
 
-        IDDFS.search(new Conf(startConf, 0, 0), endConf);
+        AStar.search(new Conf(startConf, 0, 0), endConf);
 
     }
 
