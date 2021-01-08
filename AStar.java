@@ -33,15 +33,16 @@ public class AStar {
         return min;
     }
 
-    public static void search(Conf start, char[][] end)
+    public static void search(char[][] start, char[][] end)
     {
         // nodes to visit
         ArrayList<Conf> nodes = new ArrayList<>();
 
         // set start node
-        start.g = 0;
-        start.h = incorrectlyPlaced(start.conf, end);
-        nodes.add(start);
+        Conf startNode = new Conf(start, 0, 0);
+        startNode.g = 0;
+        startNode.h = incorrectlyPlaced(start, end);
+        nodes.add(startNode);
 
         // visited nodes
         ArrayList<Conf> visited = new ArrayList<>();
@@ -66,16 +67,17 @@ public class AStar {
                 System.out.println("Maksimalna globina: " + current.g);
                 System.out.println("Obdelana vozlišča: " + (current.g + 1));
                 System.out.println("Generirana vozlišča: " + generatedNodes);
-                System.out.println("Izpis ukazov (od spodaj navzdgor): ");
 
-                // print path
+                // get path
+                StringBuilder s = new StringBuilder();
                 current = map.get(current.conf);
                 while (map.containsKey(current.conf))
                 {
-                    System.out.println(current.toString());
+                    s.append(current.toString());
                     current = map.get(current.conf);
                 }
-                System.out.println(current.toString());
+                s.append(current.toString());
+                System.out.println("Izpis ukazov (od desne proti levi): " + s.toString());
 
                 return;
             }

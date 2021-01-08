@@ -218,7 +218,7 @@ public class Main {
         char[][] startConf = readFile("primer1_zacetna.txt");
         char[][] endConf   = readFile("primer1_koncna.txt");
 
-        AStar.search(new Conf(startConf, 0, 0), endConf);
+        IDDFS.search(startConf, endConf);
 
     }
 

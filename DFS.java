@@ -7,7 +7,7 @@ import java.util.Stack;
 
 public class DFS {
 
-    public static void search(Conf start, char[][] end)
+    public static void search(char[][] start, char[][] end)
     {
         Stack<Conf> stack = new Stack<>();          // nodes to visit
         ArrayList<Conf> visited = new ArrayList<>();// already visited nodes
@@ -17,7 +17,7 @@ public class DFS {
         int maxDepth = 0, generatedNodes = 0;
 
         // Add start to checked nodes
-        stack.push(start);
+        stack.push(new Conf(start, 0, 0));
 
         // While there are nodes to check
         while (!stack.isEmpty())
@@ -32,16 +32,18 @@ public class DFS {
                 System.out.println("Generirana vozlišča: " + generatedNodes);
 
                 // Print path
-                System.out.println("Izpis ukazov (od spodaj navzdgor): ");
+                System.out.print("Izpis ukazov (od desne proti levi): ");
+                StringBuilder s = new StringBuilder();
                 current = map.get(current.conf);
                 while (map.containsKey(current.conf))
                 {
-                    System.out.println(current.toString());
+                    s.append(current.toString());
                     current = map.get(current.conf);
 
                     maxDepth++;
                 }
-                System.out.println(current.toString());
+                s.append(current.toString());
+                System.out.println(s.toString());
 
                 System.out.println("Maksimalna globina: " + maxDepth);
 

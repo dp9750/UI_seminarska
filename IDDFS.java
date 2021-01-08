@@ -7,15 +7,16 @@ import java.util.Stack;
 
 public class IDDFS {
 
-    public static void search(Conf start, char[][] end)
+    public static void search(char[][] start, char[][] end)
     {
         Stack<Conf> stack = new Stack<>();              // nodes to check
-        stack.push(start);
+        Conf startNode = new Conf(start, 0, 0);
+        stack.push(startNode);
 
         ArrayList<Conf> visited = new ArrayList<>();    // already visited nodes
 
         ArrayList<Conf> parents = new ArrayList<>();    // parent nodes
-        parents.add(start);                             // add root
+        parents.add(startNode);                             // add root
 
         Map<char[][], Conf> map = new HashMap<>();      // path
 
@@ -33,16 +34,18 @@ public class IDDFS {
                 System.out.println("Maksimalna globina: " + depth);
                 System.out.println("Obdelana vozlišča: " + (visited.size() + 1));
                 System.out.println("Generirana vozlišča: " + generatedNodes);
-                System.out.println("Izpis ukazov (od spodaj navzdgor): ");
+                System.out.print("Izpis ukazov (desne proti levi): ");
 
                 // Print path
+                StringBuilder s = new StringBuilder();
                 current = map.get(current.conf);
                 while (map.containsKey(current.conf))
                 {
-                    System.out.println(current.toString());
+                    s.append(current.toString());
                     current = map.get(current.conf);
                 }
-                System.out.println(current.toString());
+                s.append(current.toString());
+                System.out.println(s.toString());
 
                 return;
             }

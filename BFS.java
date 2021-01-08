@@ -4,49 +4,66 @@ import java.util.*;
 
 public class BFS {
 
-    public static void search(char[][] start, char[][] end)
+    public static void search(char[][] startConf, char[][] endConf)
     {
-        ArrayList<Conf> visited = new ArrayList<>();    // Already visited nodes/configurations
+        // statistics
+        int maxDepth = 0, processedNodes = 0, generatedNodes = 1;
 
-        Queue<Conf> queue = new LinkedList<>(); // Nodes to check
-        queue.add(new Conf(start, 0,0));
+        int l = 0;
 
-        Map<char[][], Conf> map = new HashMap<>();
+        ArrayList<Conf> confs = new ArrayList<>();
+        confs.add(new Conf(startConf, 0, 0));
 
-        while (!queue.isEmpty())
+        // path
+        ArrayList<Integer> from = new ArrayList<>();
+
+        Queue<Conf> queue = new LinkedList<>();
+
+        queue.add(confs.get(0));
+        from.add(-1);
+
+        while(!queue.isEmpty())
         {
-            Conf currentNode = queue.remove();
+            // current node
+            Conf current = queue.remove();
+            processedNodes++;
 
-            // If currentNode is the solution
-            if (Main.compare(currentNode.conf, end))
+            // is current node the solution
+            if(Main.compare(current.conf, endConf))
             {
-                while (map.containsKey(currentNode.conf))
-                {
-                    System.out.println(map.get(currentNode.conf).toString());
-                    
-                    currentNode = map.get(currentNode.conf);
-                }
+                String rez = confs.get(l).toString();
+
+                do {
+                    l = from.get(l);
+
+                    maxDepth++;
+                    rez = confs.get(l).toString() + rez;
+                } while (l >= 1);
+
+                System.out.println("Ukazi: " + rez.substring(5));   // remove (0, 0)
+                System.out.println("Število generiranih vozlišč: " + generatedNodes);
+                System.out.println("Število obdelanih vozlišč: " + processedNodes);
+                System.out.println("Največja preiskana globina: " + maxDepth);
 
                 return;
             }
 
-            // Add current node to check ones
-            visited.add(currentNode);
+            // Newly generated configurations
+            ArrayList<Conf> generated = Main.generate(current.conf);
 
-            // Generate neighbours
-            ArrayList<Conf> neighbours = Main.generate(currentNode.conf);
-
-            // Check neighbours
-            for (Conf neighbour : neighbours)
+            // Add unique
+            for (Conf c : generated)
             {
-                // Check only the new ones
-                if (!Main.containsConf(visited, neighbour.conf))
+                if (!Main.containsConf(confs, c.conf))
                 {
-                    queue.add(neighbour);
+                    confs.add(c);
+                    queue.add(c);
 
-                    map.put(neighbour.conf, new Conf(currentNode.conf, neighbour.p, neighbour.r));
+                    from.add(l);
+                    generatedNodes++;
                 }
             }
+            l++;
         }
     }
 
