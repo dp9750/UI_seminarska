@@ -9,16 +9,16 @@ public class IDDFS {
 
     public static void search(char[][] start, char[][] end)
     {
-        Stack<Conf> stack = new Stack<>();              // nodes to check
-        Conf startNode = new Conf(start, 0, 0);
+        Stack<Node> stack = new Stack<>();              // nodes to check
+        Node startNode = new Node(start, 0, 0);
         stack.push(startNode);
 
-        ArrayList<Conf> visited = new ArrayList<>();    // already visited nodes
+        ArrayList<Node> visited = new ArrayList<>();    // already visited nodes
 
-        ArrayList<Conf> parents = new ArrayList<>();    // parent nodes
+        ArrayList<Node> parents = new ArrayList<>();    // parent nodes
         parents.add(startNode);                             // add root
 
-        Map<char[][], Conf> map = new HashMap<>();      // path
+        Map<char[][], Node> map = new HashMap<>();      // path
 
         int depth = 0;  // current depth to check, starts with 0 (root)
         int generatedNodes = 1; // statistics. 1, including root node
@@ -26,7 +26,7 @@ public class IDDFS {
         while (!stack.isEmpty())
         {
             // get current node
-            Conf current = stack.pop();
+            Node current = stack.pop();
 
             // is current node the solution
             if (Main.compare(current.conf, end))
@@ -58,22 +58,22 @@ public class IDDFS {
             {
                 depth++;
 
-                ArrayList<Conf> tmp = new ArrayList<>();
+                ArrayList<Node> tmp = new ArrayList<>();
 
                 // for each parent node generate its 'children' nodes
-                for (Conf parent : parents)
+                for (Node parent : parents)
                 {
-                    ArrayList<Conf> neighbours = Main.generate(parent.conf);
+                    ArrayList<Node> neighbours = Main.generate(parent.conf);
 
                     // only the not already visited ones
-                    for (Conf neighbour : neighbours) {
+                    for (Node neighbour : neighbours) {
                         if (!Main.containsConf(visited, neighbour.conf))
                         {
                             stack.push(neighbour);
                             tmp.add(neighbour);
 
                             generatedNodes++;
-                            map.put(neighbour.conf, new Conf(parent.conf, neighbour.p, neighbour.r));
+                            map.put(neighbour.conf, new Node(parent.conf, neighbour.p, neighbour.r));
                         }
                     }
                 }

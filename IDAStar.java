@@ -7,7 +7,7 @@ public class IDAStar
     private char[][] end;   // end configuration
     private boolean found;  // solution found?
 
-    private ArrayList<Conf> path;
+    private ArrayList<Node> path;
 
     // statistics
     private int generatedNodes = 0;
@@ -29,7 +29,7 @@ public class IDAStar
         generatedNodes++;
 
         // get current node
-        Conf curNode = path.get(0);
+        Node curNode = path.get(0);
 
         // calculate fScore : g + h
         int fScore = gScore + incorrectlyPlaced(curNode.conf, end);
@@ -49,10 +49,10 @@ public class IDAStar
         int min = Integer.MAX_VALUE;
 
         // generate neighbours
-        ArrayList<Conf> generated = Main.generate(curNode.conf);
+        ArrayList<Node> generated = Main.generate(curNode.conf);
 
         // add unique
-        for (Conf c : generated)
+        for (Node c : generated)
         {
             if (!Main.containsConf(path, c.conf))
             {
@@ -80,7 +80,7 @@ public class IDAStar
 
         // add start node to path
         path = new ArrayList<>();
-        path.add(new Conf(startConf, 0, 0));
+        path.add(new Node(startConf, 0, 0));
 
         // h value
         int bound = incorrectlyPlaced(startConf, endConf);

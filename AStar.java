@@ -17,7 +17,7 @@ public class AStar {
     }
 
     /** return index of the best node to visit next */
-    private static int best(ArrayList<Conf> nodes)
+    private static int best(ArrayList<Node> nodes)
     {
         if (nodes.size() < 2) return 0;
 
@@ -25,11 +25,11 @@ public class AStar {
         for (int i = 1; i < nodes.size(); i++)
         {
             // g + h value of the current node
-            Conf curNode = nodes.get(i);
+            Node curNode = nodes.get(i);
             int curSum = curNode.g + curNode.h;
 
             // g + h value of the current minimum
-            Conf minNode = nodes.get(i);
+            Node minNode = nodes.get(i);
             int minSum = minNode.g + minNode.h;
 
             // set new minimum
@@ -42,19 +42,19 @@ public class AStar {
     public static void search(char[][] start, char[][] end)
     {
         // nodes to visit
-        ArrayList<Conf> nodes = new ArrayList<>();
+        ArrayList<Node> nodes = new ArrayList<>();
 
         // set start node
-        Conf startNode = new Conf(start, 0, 0);
+        Node startNode = new Node(start, 0, 0);
         startNode.g = 0;
         startNode.h = incorrectlyPlaced(start, end);
         nodes.add(startNode);
 
         // visited nodes
-        ArrayList<Conf> visited = new ArrayList<>();
+        ArrayList<Node> visited = new ArrayList<>();
 
         // path
-        Map<char[][], Conf> map = new HashMap<>();
+        Map<char[][], Node> map = new HashMap<>();
 
         int generatedNodes = 0;
 
@@ -63,7 +63,7 @@ public class AStar {
         {
             // get next best node
             int index = best(nodes);
-            Conf current = nodes.remove(index);
+            Node current = nodes.remove(index);
             generatedNodes++;
 
             // is current node the solution
@@ -92,8 +92,8 @@ public class AStar {
             visited.add(current);
 
             // generate nodes neighbours (that have not already been visited)
-            ArrayList<Conf> neighbours = Main.generate(current.conf);
-            for (Conf neighbour : neighbours) {
+            ArrayList<Node> neighbours = Main.generate(current.conf);
+            for (Node neighbour : neighbours) {
                 if (!Main.containsConf(visited, neighbour.conf))
                 {
                     // add neighbour
@@ -101,7 +101,7 @@ public class AStar {
                     neighbour.h = incorrectlyPlaced(neighbour.conf, end);
                     nodes.add(neighbour);
 
-                    map.put(neighbour.conf, new Conf(current.conf, neighbour.p, neighbour.r));
+                    map.put(neighbour.conf, new Node(current.conf, neighbour.p, neighbour.r));
                 }
             }
         }

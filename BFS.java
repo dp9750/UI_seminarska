@@ -11,33 +11,33 @@ public class BFS {
 
         int l = 0;
 
-        ArrayList<Conf> confs = new ArrayList<>();
-        confs.add(new Conf(startConf, 0, 0));
+        ArrayList<Node> nodes = new ArrayList<>();
+        nodes.add(new Node(startConf, 0, 0));
 
         // path
         ArrayList<Integer> from = new ArrayList<>();
 
-        Queue<Conf> queue = new LinkedList<>();
+        Queue<Node> queue = new LinkedList<>();
 
-        queue.add(confs.get(0));
+        queue.add(nodes.get(0));
         from.add(-1);
 
         while(!queue.isEmpty())
         {
             // current node
-            Conf current = queue.remove();
+            Node current = queue.remove();
             processedNodes++;
 
             // is current node the solution
             if(Main.compare(current.conf, endConf))
             {
-                String rez = confs.get(l).toString();
+                String rez = nodes.get(l).toString();
 
                 do {
                     l = from.get(l);
 
                     maxDepth++;
-                    rez = confs.get(l).toString() + rez;
+                    rez = nodes.get(l).toString() + rez;
                 } while (l >= 1);
 
                 System.out.println("Ukazi: " + rez.substring(5));   // remove (0, 0)
@@ -49,14 +49,14 @@ public class BFS {
             }
 
             // Newly generated configurations
-            ArrayList<Conf> generated = Main.generate(current.conf);
+            ArrayList<Node> generated = Main.generate(current.conf);
 
             // Add unique
-            for (Conf c : generated)
+            for (Node c : generated)
             {
-                if (!Main.containsConf(confs, c.conf))
+                if (!Main.containsConf(nodes, c.conf))
                 {
-                    confs.add(c);
+                    nodes.add(c);
                     queue.add(c);
 
                     from.add(l);

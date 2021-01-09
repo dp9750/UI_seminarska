@@ -52,10 +52,7 @@ public class Main {
         return out;
     }
 
-    /**
-     * Print 2d char array
-     * @param conf 2d char configuration array
-     */
+    /** Print 2d char array */
     public static void print2DArray(char[][] conf) {
         for (char[] chars : conf) {
             for (char c : chars)
@@ -122,26 +119,13 @@ public class Main {
     }
 
     /**
-     * Does ArrayList confs contain given configuration
-     * @param confs ArrayList of configurations
-     * @param conf current configuration
-     * @return true or false
-     */
-    public static boolean contains(ArrayList<char[][]> confs, char[][] conf) {
-        for (char[][] chars : confs)
-            if (compare(chars, conf))
-                return true;
-        return false;
-    }
-
-    /**
-     * Does ArrayList of configurations contain a given configuration
-     * @param confs all configurations
+     * Does ArrayList of configurations contain the given configuration
+     * @param nodes ArrayList configurations
      * @param conf given config
      * @return true or false
      */
-    public static boolean containsConf(ArrayList<Conf> confs, char[][] conf) {
-        for (Conf value : confs)
+    public static boolean containsConf(ArrayList<Node> nodes, char[][] conf) {
+        for (Node value : nodes)
             if (compare(conf, value.conf))
                 return true;
         return false;
@@ -153,11 +137,11 @@ public class Main {
      * @param conf given start configuration
      * @return ArrayList of all configurations & parameters
      */
-    public static ArrayList<Conf> generate(char[][] conf) {
+    public static ArrayList<Node> generate(char[][] conf) {
         final int cols = conf[0].length;
 
-        ArrayList<Conf> confs = new ArrayList<>();
-        confs.add(new Conf(conf, 0,0));
+        ArrayList<Node> nodes = new ArrayList<>();
+        nodes.add(new Node(conf, 0,0));
 
         // Try placing blocks to the right of current block
         for (int y = 0; y < cols; y++) {
@@ -165,8 +149,8 @@ public class Main {
                 char[][] tmpConf = copy(conf);
                 move(tmpConf, y+1, x+1);
 
-                if (!containsConf(confs, tmpConf))
-                    confs.add(new Conf(tmpConf, y+1, x+1));
+                if (!containsConf(nodes, tmpConf))
+                    nodes.add(new Node(tmpConf, y+1, x+1));
             }
         }
 
@@ -176,33 +160,27 @@ public class Main {
                 char[][] tmpConf = copy(conf);
                 move(tmpConf, y+1, x+1);
 
-                if (!containsConf(confs, tmpConf))
-                    confs.add(new Conf(tmpConf, y+1, x+1));
+                if (!containsConf(nodes, tmpConf))
+                    nodes.add(new Node(tmpConf, y+1, x+1));
             }
         }
 
-        return confs;
+        return nodes;
     }
 
     /**
      * Does stack contain given configuration
      * @param stack given stack
-     * @param conf given configuration
+     * @param node given configuration
      * @return true or false
      */
-    public static boolean stackContains(Stack<Conf> stack, Conf conf) {
-        for (Conf value : stack)
-            if (compare(conf.conf, value.conf))
+    public static boolean stackContains(Stack<Node> stack, Node node) {
+        for (Node value : stack)
+            if (compare(node.conf, value.conf))
                 return true;
         return false;
     }
 
-    /**
-     * Začetno in končno konfiguracijo prejme iz args ali standard inputa?
-     *
-     * Začetna: args[0]
-     * Končna:  args[1]
-     */
     public static void main(String[] args) {
 
         char[][] startConf = readFile("primer1_zacetna.txt");
