@@ -6,14 +6,14 @@ import java.util.Map;
 
 public class AStar {
 
-    /** calculate 'h' value */
+    /** calculate h value */
     private static int incorrectlyPlaced(char[][] conf, char[][] end) {
-        int n = 0;
+        int h = 0;
         for (int y = 0; y < conf.length; y++)
             for (int x = 0; x < conf[y].length; x++)
                 if (conf[y][x] != end[y][x])
-                    n++;
-        return n;
+                    h++;
+        return h;
     }
 
     /** return index of the best node to visit next */
@@ -24,10 +24,16 @@ public class AStar {
         int min = 0;
         for (int i = 1; i < nodes.size(); i++)
         {
-            Conf node = nodes.get(i);
-            int sum = node.g + node.h;
+            // g + h value of the current node
+            Conf curNode = nodes.get(i);
+            int curSum = curNode.g + curNode.h;
 
-            if (sum < min)
+            // g + h value of the current minimum
+            Conf minNode = nodes.get(i);
+            int minSum = minNode.g + minNode.h;
+
+            // set new minimum
+            if (curSum < minSum)
                 min = i;
         }
         return min;

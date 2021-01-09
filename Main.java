@@ -204,22 +204,11 @@ public class Main {
      * Končna:  args[1]
      */
     public static void main(String[] args) {
-        /*
-        if (args.length < 2) {
-            System.out.println("Podaj poti do konfiguracij");
-            System.exit(1);
-        }
 
-        char[][] startConf = readFile(args[0]);
-        char[][] endConf   = readFile(args[1]);
-         */
-
-        // Začasno:
         char[][] startConf = readFile("primer1_zacetna.txt");
         char[][] endConf   = readFile("primer1_koncna.txt");
 
-        IDDFS.search(startConf, endConf);
-
+        new IDAStar().find(startConf, endConf);
     }
 
 }
