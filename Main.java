@@ -183,9 +183,13 @@ public class Main {
 
     public static void main(String[] args) {
 
-        char[][] startConf = readFile("primer1_zacetna.txt");
-        char[][] endConf   = readFile("primer1_koncna.txt");
+        char[][] startConf = readFile("primer3_zacetna.txt");
+        char[][] endConf   = readFile("primer3_koncna.txt");
 
+        //DFS.search(startConf, endConf);
+        //BFS.search(startConf, endConf);
+        //IDDFS.search(startConf, endConf);
+        //AStar.search(startConf, endConf);
         new IDAStar().find(startConf, endConf);
     }
 
